@@ -1,0 +1,87 @@
+from rastros import *
+from utils import (memoize, PriorityQueue)
+
+class Node:
+    def __init__(self, goal, state, parent=None, action=None, path_cost=0):
+        self.goal = goal
+        self.state = state
+        self.parent = parent
+        self.action = action
+        self.path_cost = path_cost
+        self.depth = 0
+        if parent:
+            self.depth = parent.depth + 1
+    def __lt__(self, node):
+        return self.state < node.state
+    def expand(self):
+        return [self.child_node(action)
+                for action in self.state.moves()]
+    def child_node(self, action):
+        blacks = self.state.blacks.copy()
+        blacks.add(self.state.white)
+        next = EstadoRastros(to_move=('N' if self.state.to_move == 'S' else 'S'),
+                         white=action,blacks=blacks) 
+        return Node(self.goal, next, self, action, self.path_cost + 1) #uma move é custa sempre 1
+    def solution(self):
+        return [node.action for node in self.path()[1:]]
+    def path(self):
+        node, path_back = self, []
+        while node:
+            path_back.append(node)
+            node = node.parent
+        return list(reversed(path_back))
+    def __eq__(self, other):
+        return isinstance(other, Node) and self.state == other.state
+    def __hash__(self):
+        return hash(self.state)
+def best_first_graph_search(goal, state, f):
+    f = memoize(f, 'f')
+    node = Node(goal,state)
+    if node.state.white == goal:
+        return node
+    frontier = PriorityQueue(min, f)
+    frontier.append(node)
+    explored = list()
+    while frontier:
+        node = frontier.pop()
+        if node.state.white == goal:
+            return node
+        explored.append(node.state)
+        for child in node.expand():
+            if child.state not in explored and child not in frontier:
+                frontier.append(child)
+            elif child in frontier:
+                incumbent = frontier[child]
+                if f(child) < f(incumbent):
+                    del frontier[incumbent]
+                    frontier.append(child)
+    return None
+def astar_search(goal, state, h=None):
+    return best_first_graph_search(goal, state, lambda n: n.path_cost + h(n))
+
+def heuristica(node):
+    return distancia(node.state.white, node.goal)
+
+def fun_aval_42(state, player):        
+    goal = (8, 1)
+    no_goal = (1, 8)
+    if player == "N":
+        goal = (1, 8)
+        no_goal = (8, 1)
+    
+    if state.white == goal:
+        return 10
+    elif state.white == no_goal:
+        return -10
+    elif len(state.moves()) == 0:
+        return -9 if state.to_move == player else 10
+    
+    res_astar = astar_search(goal, state, heuristica)
+    
+    if res_astar == None:
+        return -1
+    
+    #print(res_astar.solution())
+    #print(res_astar.path_cost)  
+    
+    return 1.0 / (len(res_astar.solution()))
