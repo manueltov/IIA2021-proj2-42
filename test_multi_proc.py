@@ -1,13 +1,16 @@
 from rastros import *
 
-N_CAMP = 215
+N_CAMP = 602
+raio = 2
+
+grid = [(x,y) for x in range (-raio,raio+1) for y in range(-raio,raio+1)]
 
 def fun_aval_42(state, player):        
     goal = (8, 1)
     no_goal = (1, 8)
     if player == "N":
         goal = (1, 8)
-        no_goal = (8, 1)    
+        no_goal = (8, 1)
     
     if state.white == goal:
         return 10
@@ -17,10 +20,13 @@ def fun_aval_42(state, player):
         return -9 if state.to_move == player else 9
     
     sum_score_moves = 0
-    for move in state.moves():
-        score_move_goal = 1.0 / (2 ** distancia(move, goal))
-        sum_score_moves += score_move_goal
     
+    for point in grid:
+        p = (state.white[0] + point[0] , state.white[1] + point[1])
+        if p[0] >= 1 and p[0] <= 8 and p[1] >= 1 and p[1] <= 8 and p not in state.blacks:            
+            sum_score_moves += 1.0 / (2 ** distancia(p, goal))
+            
+    #print(sum_score_moves)
     return sum_score_moves
     
 
