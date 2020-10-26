@@ -228,7 +228,7 @@ def num_livres(estado,jogador) :
 #### mais um jogador, agora com alpha-beta
 arlivre = Jogador("Ar Livre",
                   lambda game, state:
-                  alphabeta_cutoff_search_new(state,game,depth_for_all,eval_fn=num_livres))
+                  alphabeta_cutoff_search(state,game,depth_for_all,eval_fn=num_livres))
 
 
 ##### heuristica para jogador básico
@@ -250,7 +250,7 @@ def f_aval_basico(estado, jogador):
 
 basilio = Jogador("Basilio",
                   lambda game, state:
-                  alphabeta_cutoff_search_new(state,game,depth_for_all,eval_fn=f_aval_basico))
+                  alphabeta_cutoff_search(state,game,depth_for_all,eval_fn=f_aval_basico))
 
 
 

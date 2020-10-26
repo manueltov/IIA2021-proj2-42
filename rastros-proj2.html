@@ -12010,7 +12010,7 @@ Esperamos que estes jogadores vos sejam úteis para testar o programa, mas não 
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Jogadores">Jogadores<a class="anchor-link" href="#Jogadores">&#182;</a></h3><p>Como exemplificado no <code>Rastros.py</code>, as instâncias da classe <code>Jogador</code> incluem um nome e uma função de escolha da jogada a efectuar. Para o torneio, devem apenas desenvolver uma heurística que será aplicada pelo algoritmo minimax alfa-beta definido no ficheiro <code>jogos.py</code> na função <code>alphabeta_cutoff_search_new</code>. Para evitar que algum jogador mais hesitante fique eternamente a pensar, usaremos um limite de tempo para cada jogada. Quem demorar mais do que n segundos a pensar perde imediatamente o jogo. Notem que isto não significa que a função de avaliação tem n segundos para ser executada, já que ela é usada repetidas vezes por cada invocação do minimax alfa-beta.</p>
+<h3 id="Jogadores">Jogadores<a class="anchor-link" href="#Jogadores">&#182;</a></h3><p>Como exemplificado no <code>Rastros.py</code>, as instâncias da classe <code>Jogador</code> incluem um nome e uma função de escolha da jogada a efectuar. Para o torneio, devem apenas desenvolver uma heurística que será aplicada pelo algoritmo minimax alfa-beta definido no ficheiro <code>jogos.py</code> na função <code>alphabeta_cutoff_search</code>. Para evitar que algum jogador mais hesitante fique eternamente a pensar, usaremos um limite de tempo para cada jogada. Quem demorar mais do que n segundos a pensar perde imediatamente o jogo. Notem que isto não significa que a função de avaliação tem n segundos para ser executada, já que ela é usada repetidas vezes por cada invocação do minimax alfa-beta.</p>
 <p>Tem no ficheiro <code>rastros.py</code> vários exemplos de jogadores muito simples, uns que escolhem apenas uma jogada da lista das possíveis, outros que têm funções heurísticas para serem usados pelo alba-beta. Os jogadores <code>humano1</code> e <code>humano2</code> pedem ao utilizador uma jogada de entre as possíveis. Usem-nos para se familiarizarem com o jogo e as suas nuances, e afinarem a vossa função heurística.</p>
 <p>Tem ainda código (comentado) para executar um pequeno campeonato entre os jogadores lá definidos, e apresentar uma tabela final de classificação com o número de vitórias de cada jogador.</p>
 
@@ -12070,7 +12070,7 @@ Esperamos que estes jogadores vos sejam úteis para testar o programa, mas não 
 <span class="c1">#### mais um jogador, agora com alpha-beta</span>
 <span class="n">arlivre</span> <span class="o">=</span> <span class="n">Jogador</span><span class="p">(</span><span class="s2">&quot;Ar Livre&quot;</span><span class="p">,</span>
                   <span class="k">lambda</span> <span class="n">game</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span>
-                  <span class="n">alphabeta_cutoff_search_new</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="n">game</span><span class="p">,</span><span class="n">depth_for_all</span><span class="p">,</span><span class="n">eval_fn</span><span class="o">=</span><span class="n">num_livres</span><span class="p">))</span>
+                  <span class="n">alphabeta_cutoff_search</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="n">game</span><span class="p">,</span><span class="n">depth_for_all</span><span class="p">,</span><span class="n">eval_fn</span><span class="o">=</span><span class="n">num_livres</span><span class="p">))</span>
 </pre></div>
 <h3 id="O-jogador-b&#225;sico-'Bas&#237;lio',-que-reconhece-estados-de-vit&#243;ria-e-de-derrota-e-em-jogos-ainda-n&#227;o-terminados-valoriza-apenas-a-dist&#226;ncia-da-pe&#231;a-Branca-&#224;-casa-objectivo-de-cada-jogador">O jogador b&#225;sico 'Bas&#237;lio', que reconhece estados de vit&#243;ria e de derrota e em jogos ainda n&#227;o terminados valoriza apenas a dist&#226;ncia da pe&#231;a Branca &#224; casa objectivo de cada jogador<a class="anchor-link" href="#O-jogador-b&#225;sico-'Bas&#237;lio',-que-reconhece-estados-de-vit&#243;ria-e-de-derrota-e-em-jogos-ainda-n&#227;o-terminados-valoriza-apenas-a-dist&#226;ncia-da-pe&#231;a-Branca-&#224;-casa-objectivo-de-cada-jogador">&#182;</a></h3><h2 id="Aten&#231;&#227;o-a-este,-que-ser&#225;-o-vosso-competidor,-com-depth=5">Aten&#231;&#227;o a este, que ser&#225; o vosso competidor, com depth=5<a class="anchor-link" href="#Aten&#231;&#227;o-a-este,-que-ser&#225;-o-vosso-competidor,-com-depth=5">&#182;</a></h2><div class="highlight"><pre><span></span><span class="c1">##### heuristica para jogador básico</span>
 <span class="c1"># derrota vale -10, vitória vale 10,</span>
@@ -12090,7 +12090,7 @@ Esperamos que estes jogadores vos sejam úteis para testar o programa, mas não 
 
 <span class="n">basilio</span> <span class="o">=</span> <span class="n">Jogador</span><span class="p">(</span><span class="s2">&quot;Basilio&quot;</span><span class="p">,</span>
                   <span class="k">lambda</span> <span class="n">game</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span>
-                  <span class="n">alphabeta_cutoff_search_new</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="n">game</span><span class="p">,</span><span class="n">depth</span><span class="p">,</span><span class="n">eval_fn</span><span class="o">=</span><span class="n">f_aval_basico</span><span class="p">))</span>
+                  <span class="n">alphabeta_cutoff_search</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="n">game</span><span class="p">,</span><span class="n">depth</span><span class="p">,</span><span class="n">eval_fn</span><span class="o">=</span><span class="n">f_aval_basico</span><span class="p">))</span>
 </pre></div>
 
 </div>
@@ -12157,7 +12157,7 @@ Esperamos que estes jogadores vos sejam úteis para testar o programa, mas não 
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>([(&#39;ObtusoSW&#39;, (5, 4)), (&#39;Bacoco&#39;, (6, 4)), (&#39;ObtusoSW&#39;, (7, 3)), (&#39;Bacoco&#39;, (8, 3)), (&#39;ObtusoSW&#39;, (8, 2)), (&#39;Bacoco&#39;, (7, 1)), (&#39;ObtusoSW&#39;, (8, 1))], 1)
+<pre>([(&#39;ObtusoSW&#39;, (5, 4)), (&#39;Bacoco&#39;, (6, 3)), (&#39;ObtusoSW&#39;, (7, 2)), (&#39;Bacoco&#39;, (6, 1)), (&#39;ObtusoSW&#39;, (7, 1)), (&#39;Bacoco&#39;, (8, 1))], 1)
 </pre>
 </div>
 </div>
@@ -12197,12 +12197,11 @@ Esperamos que estes jogadores vos sejam úteis para testar o programa, mas não 
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>ObtusoSW--&gt;  (5, 4)
-Bacoco--&gt;  (6, 4)
-ObtusoSW--&gt;  (7, 3)
-Bacoco--&gt;  (8, 3)
-ObtusoSW--&gt;  (8, 2)
-Bacoco--&gt;  (7, 1)
-ObtusoSW--&gt;  (8, 1)
+Bacoco--&gt;  (6, 3)
+ObtusoSW--&gt;  (7, 2)
+Bacoco--&gt;  (6, 1)
+ObtusoSW--&gt;  (7, 1)
+Bacoco--&gt;  (8, 1)
 Ganhou S
 </pre>
 </div>
@@ -12269,7 +12268,7 @@ Tabuleiro:
  12345678 
 Próximo jogador:N
 
-Bacoco--&gt;  (6, 4)
+Bacoco--&gt;  (6, 3)
 Tabuleiro:
  12345678
 1........1
@@ -12277,13 +12276,13 @@ Tabuleiro:
 3........3
 4....@...4
 5...@....5
-6...o....6
+6..o.....6
 7........7
 8........8
  12345678 
 Próximo jogador:S
 
-ObtusoSW--&gt;  (7, 3)
+ObtusoSW--&gt;  (7, 2)
 Tabuleiro:
  12345678
 1........1
@@ -12291,13 +12290,13 @@ Tabuleiro:
 3........3
 4....@...4
 5...@....5
-6...@....6
-7..o.....7
+6..@.....6
+7.o......7
 8........8
  12345678 
 Próximo jogador:N
 
-Bacoco--&gt;  (8, 3)
+Bacoco--&gt;  (6, 1)
 Tabuleiro:
  12345678
 1........1
@@ -12305,13 +12304,13 @@ Tabuleiro:
 3........3
 4....@...4
 5...@....5
-6...@....6
-7..@.....7
-8..o.....8
+6o.@.....6
+7.@......7
+8........8
  12345678 
 Próximo jogador:S
 
-ObtusoSW--&gt;  (8, 2)
+ObtusoSW--&gt;  (7, 1)
 Tabuleiro:
  12345678
 1........1
@@ -12319,13 +12318,13 @@ Tabuleiro:
 3........3
 4....@...4
 5...@....5
-6...@....6
-7..@.....7
-8.o@.....8
+6@.@.....6
+7o@......7
+8........8
  12345678 
 Próximo jogador:N
 
-Bacoco--&gt;  (7, 1)
+Bacoco--&gt;  (8, 1)
 Tabuleiro:
  12345678
 1........1
@@ -12333,23 +12332,9 @@ Tabuleiro:
 3........3
 4....@...4
 5...@....5
-6...@....6
-7o.@.....7
-8.@@.....8
- 12345678 
-Próximo jogador:S
-
-ObtusoSW--&gt;  (8, 1)
-Tabuleiro:
- 12345678
-1........1
-2........2
-3........3
-4....@...4
-5...@....5
-6...@....6
-7@.@.....7
-8o@@.....8
+6@.@.....6
+7@@......7
+8o.......8
  12345678 
 FIM do Jogo
 Ganhou S
@@ -12425,11 +12410,11 @@ Ganhou S
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>JOGADOR VITÓRIAS
-Basilio        5
-Bacoco         4
-ObtusoNE       4
+Basilio        8
 Ar Livre       4
-ObtusoSW       3
+Bacoco         3
+ObtusoNE       3
+ObtusoSW       2
 </pre>
 </div>
 </div>
@@ -12469,8 +12454,8 @@ ObtusoSW       3
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>JOGADOR VITÓRIAS
-Bacoco         3
-Basilio        2
+Basilio        4
+Bacoco         1
 Ar Livre       1
 </pre>
 </div>
@@ -12526,7 +12511,7 @@ Ar Livre       1
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Prazo">Prazo<a class="anchor-link" href="#Prazo">&#182;</a></h3><p>Dois ficheiros <strong><em>IIA2021-proj2-XX.ipynb</em></strong> e <strong><em>IIA2021-proj2-XX.py</em></strong> até ao dia <strong>28 de Outubro</strong> às 23:59</p>
+<h3 id="Prazo">Prazo<a class="anchor-link" href="#Prazo">&#182;</a></h3><p>Dois ficheiros <strong><em>IIA2021-proj2-XX.ipynb</em></strong> e <strong><em>IIA2021-proj2-XX.py</em></strong> até ao dia <strong>30 de Outubro</strong> às 23:59</p>
 
 </div>
 </div>
