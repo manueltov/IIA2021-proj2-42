@@ -1,38 +1,62 @@
 from rastros import *
 
-N_CAMP = 15
+N_CAMP = 2
 
-raio42 = 3
-grid42 = [(x,y) for x in range (-raio42,raio42+1) for y in range(-raio42,raio42+1)]
+def distancia (a, b):
+    return max(abs(a[0]-b[0]), abs(a[1]-b[1]))
+    
+def moves_from_point(point, visited_squares, state):
+        alladjacent = [(point[0]+a, point[1]+b) for a in [-1,0,1] for b in [-1,0,1]]
+        return [p for p in alladjacent
+                if p not in state.blacks and p not in visited_squares and p !=point and p in state.fullboard]
 
-def fun_aval_42(state, player):
-
+def fun_aval_42(state, player):    
     goal = (8, 1)
     no_goal = (1, 8)
     if player == "N":
         goal = (1, 8)
         no_goal = (8, 1)
-    
-    if state.white == goal:
-        return 10000
-    elif state.white == no_goal:
-        return -10000
-    elif len(state.moves()) == 0:
-        return -8000 if state.to_move == player else 8000
-    
-    for point in grid42:
-        p = (state.white[0] + point[0] , state.white[1] + point[1])
-        if p == goal:
-            return 1 / distancia(state.white, goal)
-        elif p == no_goal:
-            return -1 / distancia(state.white, no_goal)
         
-    return 1 / (raio42 ** distancia(state.white, goal))
+    if state.white == goal:
+        return 3
+    elif state.white == no_goal:
+        return -3
+    
+    moves = state.moves()
+    
+    p_moves = moves.copy()
+    if len(p_moves) < 2:
+        visited_squares = set()
+        visited_squares.add(state.white) 
+        from_point = None
+        while len(p_moves) == 1:
+            from_point = p_moves[0]
+            p_moves = moves_from_point(from_point,visited_squares,state)
+            visited_squares.add(from_point)        
+        if len(p_moves) == 0:
+            if from_point == goal:
+                return 3
+            elif from_point == no_goal:
+                return -3
+            elif (len(visited_squares) - 1) % 2 == 0:
+                return -2 if state.to_move == player else 2
+            elif (len(visited_squares) - 1) % 2 == 1:                
+                return 2 if state.to_move == player else -2
+            
+    move_score = 0
+    num_moves = 0
+    for move in moves:
+        for sub_move in moves_from_point(move,[state.white],state):
+            move_score += distancia(move, goal) - distancia(sub_move,goal)
+            num_moves += 1
+    if num_moves == 0:
+        return 0
+    return move_score / num_moves
 
 
 jogador42 = Jogador("jogador42",
                   lambda game, state:
-                  alphabeta_cutoff_search_new(state,game,depth_for_all,eval_fn=fun_aval_42))
+                  alphabeta_cutoff_search(state,game,depth_for_all,eval_fn=fun_aval_42))
 
 
 ################################################################################################
@@ -51,7 +75,7 @@ def fun_aval_421(state, player):
         return sum_dist_actions ** 3
 jogador421 = Jogador("jogador421",
                   lambda game, state:
-                  alphabeta_cutoff_search_new(state,game,depth_for_all,eval_fn=fun_aval_421))
+                  alphabeta_cutoff_search(state,game,depth_for_all,eval_fn=fun_aval_421))
 
 def fun_aval_422(state, player):
     win_or_loss = state.compute_utility(player)
@@ -71,7 +95,7 @@ def fun_aval_422(state, player):
         return sum_dist_actions ** 2
 jogador422 = Jogador("jogador422",
                   lambda game, state:
-                  alphabeta_cutoff_search_new(state,game,depth_for_all,eval_fn=fun_aval_422))
+                  alphabeta_cutoff_search(state,game,depth_for_all,eval_fn=fun_aval_422))
         
 def fun_aval_423(state, player):        
     goal = (8, 1)
@@ -96,7 +120,7 @@ def fun_aval_423(state, player):
     return (sum_score_moves * 1.0) + (score_white_goal * 3.0)
 jogador423 = Jogador("jogador423",
                   lambda game, state:
-                  alphabeta_cutoff_search_new(state,game,depth_for_all,eval_fn=fun_aval_423))
+                  alphabeta_cutoff_search(state,game,depth_for_all,eval_fn=fun_aval_423))
     
 def fun_aval_424(state, player):        
     goal = (8, 1)
@@ -120,11 +144,10 @@ def fun_aval_424(state, player):
     return sum_score_moves
 jogador424 = Jogador("jogador424",
                   lambda game, state:
-                  alphabeta_cutoff_search_new(state,game,depth_for_all,eval_fn=fun_aval_424))
+                  alphabeta_cutoff_search(state,game,depth_for_all,eval_fn=fun_aval_424))
 
-raio = 2
-grid = [(x,y) for x in range (-raio,raio+1) for y in range(-raio,raio+1)]
-
+raio425 = 2
+grid425 = [(x,y) for x in range (-raio425,raio425+1) for y in range(-raio425,raio425+1)]
 def fun_aval_425(state, player):        
     goal = (8, 1)
     no_goal = (1, 8)
@@ -141,7 +164,7 @@ def fun_aval_425(state, player):
     
     sum_score_moves = 0
     
-    for point in grid:
+    for point in grid425:
         p = (state.white[0] + point[0] , state.white[1] + point[1])
         if p[0] >= 1 and p[0] <= 8 and p[1] >= 1 and p[1] <= 8 and p not in state.blacks:            
             sum_score_moves += 1.0 / (2 ** distancia(p, goal))
@@ -149,7 +172,7 @@ def fun_aval_425(state, player):
     return sum_score_moves
 jogador425 = Jogador("jogador425",
                   lambda game, state:
-                  alphabeta_cutoff_search_new(state,game,depth_for_all,eval_fn=fun_aval_425))
+                  alphabeta_cutoff_search(state,game,depth_for_all,eval_fn=fun_aval_425))
     
 def fun_aval_426(state, player):        
     goal = (8, 1)
@@ -172,7 +195,7 @@ def fun_aval_426(state, player):
     return (no_goal_dist_score * ((24 / turns)**3)) + (goal_dist_score * ((turns / 24)**3))
 jogador426 = Jogador("jogador426",
                   lambda game, state:
-                  alphabeta_cutoff_search_new(state,game,depth_for_all,eval_fn=fun_aval_426))
+                  alphabeta_cutoff_search(state,game,depth_for_all,eval_fn=fun_aval_426))
     
 def fun_aval_427(state, player):        
     goal = (8, 1)
@@ -199,9 +222,167 @@ def fun_aval_427(state, player):
     return goal_dist_score
 jogador427 = Jogador("jogador427",
                   lambda game, state:
-                  alphabeta_cutoff_search_new(state,game,depth_for_all,eval_fn=fun_aval_427))
+                  alphabeta_cutoff_search(state,game,depth_for_all,eval_fn=fun_aval_427))
+                 
+raio428 = 2
+grid428 = [(x,y) for x in range (-raio428,raio428+1) for y in range(-raio428,raio428+1)]
+def fun_aval_428(state, player):
+    goal = (8, 1)
+    no_goal = (1, 8)
+    if player == "N":
+        goal = (1, 8)
+        no_goal = (8, 1)
     
+    if state.white == goal:
+        return 10000
+    elif state.white == no_goal:
+        return -10000
+    elif len(state.moves()) == 0:
+        return -8000 if state.to_move == player else 8000
+    
+    for point in grid428:
+        p = (state.white[0] + point[0] , state.white[1] + point[1])
+        if p == goal:
+            return 1 / distancia(state.white, goal)
+        elif p == no_goal:
+            return -1 / distancia(state.white, no_goal)
+        
+    return 1 / (raio428 ** distancia(state.white, goal))
+jogador428 = Jogador("jogador428",
+                  lambda game, state:
+                  alphabeta_cutoff_search(state,game,depth_for_all,eval_fn=fun_aval_428))
 
+raio429 = 3
+grid429 = [(x,y) for x in range (-raio429,raio429+1) for y in range(-raio429,raio429+1)]
+def fun_aval_429(state, player):
+    goal = (8, 1)
+    no_goal = (1, 8)
+    if player == "N":
+        goal = (1, 8)
+        no_goal = (8, 1)
+    
+    if state.white == goal:
+        return 10000
+    elif state.white == no_goal:
+        return -10000
+    elif len(state.moves()) == 0:
+        return -8000 if state.to_move == player else 8000
+    
+    for point in grid429:
+        p = (state.white[0] + point[0] , state.white[1] + point[1])
+        if p == goal:
+            return 1 / distancia(state.white, goal)
+        elif p == no_goal:
+            return -1 / distancia(state.white, no_goal)
+        
+    return 1 / (raio429 ** distancia(state.white, goal))
+jogador429 = Jogador("jogador429",
+                  lambda game, state:
+                  alphabeta_cutoff_search(state,game,depth_for_all,eval_fn=fun_aval_429))
+                  
+def fun_aval_430(state, player):    
+    goal = (8, 1)
+    no_goal = (1, 8)
+    if player == "N":
+        goal = (1, 8)
+        no_goal = (8, 1)
+    
+    if state.white == goal:
+        return 3
+    elif state.white == no_goal:
+        return -3
+    elif len(state.moves()) == 0:
+        return -2 if state.to_move == player else 2
+    elif distancia(state.white, goal) <= 3:
+        return 1.5
+    
+    return 1 / distancia(state.white, goal)
+jogador430 = Jogador("jogador430",
+                  lambda game, state:
+                  alphabeta_cutoff_search(state,game,depth_for_all,eval_fn=fun_aval_430))
+                  
+def fun_aval_431(state, player):    
+    goal = (8, 1)
+    no_goal = (1, 8)
+    if player == "N":
+        goal = (1, 8)
+        no_goal = (8, 1)
+        
+    if state.white == goal:
+        return 3
+    elif state.white == no_goal:
+        return -3
+    
+    p_moves = state.moves()
+    if len(p_moves) < 2:
+        visited_squares = set()
+        visited_squares.add(state.white) 
+        from_point = None
+        while len(p_moves) == 1:
+            from_point = p_moves[0]
+            p_moves = moves_from_point(from_point,visited_squares,state)
+            visited_squares.add(from_point)        
+        if len(p_moves) == 0:
+            if from_point == goal:
+                return 3
+            elif from_point == no_goal:
+                return -3
+            elif (len(visited_squares) - 1) % 2 == 0:
+                return -2 if state.to_move == player else 2
+            elif (len(visited_squares) - 1) % 2 == 1:                
+                return 2 if state.to_move == player else -2
+        
+    if distancia(state.white, goal) <= 3:
+        return (1 / distancia(state.white, goal)) + 1
+    if distancia(state.white, no_goal) <= 3:
+        return (1 / distancia(state.white, goal)) - 1
+    
+    return 1 / distancia(state.white, goal)
+jogador431 = Jogador("jogador431",
+                  lambda game, state:
+                  alphabeta_cutoff_search(state,game,depth_for_all,eval_fn=fun_aval_431))
+
+def fun_aval_432(state, player):    
+    goal = (8, 1)
+    no_goal = (1, 8)
+    if player == "N":
+        goal = (1, 8)
+        no_goal = (8, 1)
+        
+    if state.white == goal:
+        return 3
+    elif state.white == no_goal:
+        return -3
+    
+    p_moves = state.moves()
+    if len(p_moves) < 2:
+        visited_squares = set()
+        visited_squares.add(state.white) 
+        from_point = None
+        while len(p_moves) == 1:
+            from_point = p_moves[0]
+            p_moves = moves_from_point(from_point,visited_squares,state)
+            visited_squares.add(from_point)        
+        if len(p_moves) == 0:
+            if from_point == goal:
+                return 3
+            elif from_point == no_goal:
+                return -3
+            elif (len(visited_squares) - 1) % 2 == 0:
+                return -2 if state.to_move == player else 2
+            elif (len(visited_squares) - 1) % 2 == 1:                
+                return 2 if state.to_move == player else -2
+        
+    if distancia(state.white, goal) <= 3:
+        return 1
+    if distancia(state.white, no_goal) <= 3:
+        return -1
+    
+    return 1 / distancia(state.white, goal)
+jogador432 = Jogador("jogador432",
+                  lambda game, state:
+                  alphabeta_cutoff_search(state,game,depth_for_all,eval_fn=fun_aval_432))
+    
 #########################################################################################################
 
 
@@ -254,10 +435,13 @@ def n_faz_campeonato(num_campeonatos, listaJogadores, nsec=10, verbose = False):
     for jogador in jogador_vitorias:
         print('{:11}'.format(jogador), '{:>4}'.format(jogador_vitorias[jogador]))
 
+basilio_test = Jogador("Basilio_test", lambda game, state:
+                  alphabeta_cutoff_search(state,game,depth_for_all,eval_fn=f_aval_basico))
         
 lista_campeonato = [jogador42, jogador421, jogador422, jogador423, 
                     jogador424, jogador425, jogador426, jogador427, 
-                    bacoco, obtusoSW, obtusoNE, arlivre, basilio]
+                    jogador428,jogador429,jogador430,jogador431,jogador432,
+                    basilio_test]
                     
 if __name__ == '__main__':
     n_faz_campeonato(N_CAMP, lista_campeonato, verbose = False)
