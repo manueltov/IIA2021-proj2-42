@@ -1,6 +1,6 @@
 from rastros import *
 
-N_CAMP = 38
+N_CAMP = 20
 
 def distancia (a, b):
     return max(abs(a[0]-b[0]), abs(a[1]-b[1]))
@@ -74,7 +74,7 @@ def general_eval36(moves, state, goal):
             move_score += s_score
             num_moves += 1
     if num_moves == 0:
-        return 0    
+        return 3
     return (move_score / num_moves)    
 def fun_aval_436(state, player):    
     goal = (8, 1)
@@ -432,7 +432,220 @@ def fun_aval_4398(state, player):
 jogador4398 = Jogador("jogador4398",
                   lambda game, state:
                   alphabeta_cutoff_search_new(state,game,depth_for_all,eval_fn=fun_aval_4398))
-
+                  
+def fun_aval_4399(state, player):    
+    goal = (8, 1)
+    no_goal = (1, 8)
+    if player == "N":
+        goal = (1, 8)
+        no_goal = (8, 1)               
+    if state.white == goal:
+        return 3    
+    elif state.white == no_goal:
+        return -3    
+    dist_white_goal = distancia_42(state.white, goal)
+    if dist_white_goal <= 1:
+        return 3           
+    moves = state.moves()
+    if len(state.moves()) == 0:
+        return -3 if state.to_move == player else 3
+    if dist_white_goal <= 2 and test_near_goal_certain_win_42(state, goal):
+        return 2.5
+    if distancia_42(state.white, no_goal) <= 1:
+        return -1.5          
+    return general_eval36(moves, state, goal)
+jogador4399 = Jogador("jogador4399",
+                  lambda game, state:
+                  alphabeta_cutoff_search_new(state,game,depth_for_all,eval_fn=fun_aval_4399))
+                  
+def fun_aval_43999(state, player):    
+    goal = (8, 1)
+    no_goal = (1, 8)
+    if player == "N":
+        goal = (1, 8)
+        no_goal = (8, 1)               
+    if state.white == goal:
+        return 3    
+    elif state.white == no_goal:
+        return -3    
+    dist_white_goal = distancia_42(state.white, goal)
+    if dist_white_goal <= 1:
+        return 3           
+    moves = state.moves()
+    if len(state.moves()) == 0:
+        return -3 if state.to_move == player else 3
+    if near_goal_situation_win36(state, player, goal):
+        return 2.5
+    if distancia_42(state.white, no_goal) <= 1:
+        return -1.5          
+    return general_eval36(moves, state, goal)
+jogador43999 = Jogador("jogador43999",
+                  lambda game, state:
+                  alphabeta_cutoff_search_new(state,game,depth_for_all,eval_fn=fun_aval_43999))
+                  
+def fun_aval_439990(state, player):    
+    goal = (8, 1)
+    no_goal = (1, 8)
+    if player == "N":
+        goal = (1, 8)
+        no_goal = (8, 1)               
+    if state.white == goal:
+        return 3    
+    elif state.white == no_goal:
+        return -3    
+    dist_white_goal = distancia_42(state.white, goal)
+    if dist_white_goal <= 1:
+        return 3           
+    moves = state.moves()
+    if len(state.moves()) == 0:
+        return -3 if state.to_move == player else 3
+    if distancia_42(state.white, no_goal) <= 1:
+        return -1.5          
+    return general_eval36(moves, state, goal)
+jogador439990 = Jogador("jogador439990",
+                  lambda game, state:
+                  alphabeta_cutoff_search_new(state,game,depth_for_all,eval_fn=fun_aval_439990))
+                  
+def fun_aval_439991(state, player):    
+    goal = (8, 1)
+    no_goal = (1, 8)
+    if player == "N":
+        goal = (1, 8)
+        no_goal = (8, 1)               
+    if state.white == goal:
+        return 3    
+    elif state.white == no_goal:
+        return -3    
+    dist_white_goal = distancia_42(state.white, goal)
+    if dist_white_goal <= 1:
+        return 3           
+    moves = state.moves()
+    forced_path_res = forced_path36(state, player, goal, no_goal, moves)
+    if forced_path_res != 0:
+        return forced_path_res 
+    if distancia_42(state.white, no_goal) <= 1:
+        return -1.5          
+    return general_eval36(moves, state, goal)
+jogador439991 = Jogador("jogador439991",
+                  lambda game, state:
+                  alphabeta_cutoff_search_new(state,game,depth_for_all,eval_fn=fun_aval_439991))
+                  
+def general_eval361(moves, state, goal):
+    move_score = 0
+    num_moves = 0
+    seen = set()
+    seen.add(state.white)
+    for move in moves:
+        for sub_move in moves_from_point(move,seen,state):
+            s_score = distancia(move, goal) - distancia(sub_move,goal)
+            move_score += s_score
+            num_moves += 1
+        seen.add(move)
+    if num_moves == 0:
+        return 3
+    return (move_score / num_moves)
+def fun_aval_439992(state, player):    
+    goal = (8, 1)
+    no_goal = (1, 8)
+    if player == "N":
+        goal = (1, 8)
+        no_goal = (8, 1)               
+    if state.white == goal:
+        return 3    
+    elif state.white == no_goal:
+        return -3    
+    dist_white_goal = distancia_42(state.white, goal)
+    if dist_white_goal <= 1:
+        return 3           
+    moves = state.moves()
+    if len(moves) == 0:
+        return -3 if state.to_move == player else 3
+    if distancia_42(state.white, no_goal) <= 1:
+        return -1.5          
+    return general_eval361(moves, state, goal)
+jogador439992 = Jogador("jogador439992",
+                  lambda game, state:
+                  alphabeta_cutoff_search_new(state,game,depth_for_all,eval_fn=fun_aval_439992))
+                  
+def fun_aval_439993(state, player):    
+    goal = (8, 1)
+    no_goal = (1, 8)
+    if player == "N":
+        goal = (1, 8)
+        no_goal = (8, 1)               
+    if state.white == goal:
+        return 3    
+    elif state.white == no_goal:
+        return -3    
+    dist_white_goal = distancia_42(state.white, goal)
+    if dist_white_goal <= 1:
+        return 3           
+    moves = state.moves()    
+    forced_path = test_forced_path_42(state, player, goal, no_goal, moves)
+    if forced_path == 1:
+        return 3
+    elif forced_path == -1:
+        return -3        
+    if dist_white_goal <= 2 and test_near_goal_certain_win_42(state, goal):
+        return 2.5
+    if distancia_42(state.white, no_goal) <= 1:
+        return -1.5          
+    return general_eval361(moves, state, goal)
+jogador439993 = Jogador("jogador439993",
+                  lambda game, state:
+                  alphabeta_cutoff_search_new(state,game,depth_for_all,eval_fn=fun_aval_439993))
+                  
+def fun_aval_439994(state, player):    
+    goal = (8, 1)
+    no_goal = (1, 8)
+    if player == "N":
+        goal = (1, 8)
+        no_goal = (8, 1)               
+    if state.white == goal:
+        return 3    
+    elif state.white == no_goal:
+        return -3    
+    dist_white_goal = distancia_42(state.white, goal)
+    if dist_white_goal <= 1:
+        return 3           
+    moves = state.moves()    
+    forced_path = test_forced_path_42(state, player, goal, no_goal, moves)
+    if forced_path == 1:
+        return 3
+    elif forced_path == -1:
+        return -3
+    if distancia_42(state.white, no_goal) <= 1:
+        return -1.5          
+    return general_eval361(moves, state, goal)
+jogador439994 = Jogador("jogador439994",
+                  lambda game, state:
+                  alphabeta_cutoff_search_new(state,game,depth_for_all,eval_fn=fun_aval_439994))
+                  
+def fun_aval_439995(state, player):    
+    goal = (8, 1)
+    no_goal = (1, 8)
+    if player == "N":
+        goal = (1, 8)
+        no_goal = (8, 1)               
+    if state.white == goal:
+        return 3    
+    elif state.white == no_goal:
+        return -3    
+    dist_white_goal = distancia_42(state.white, goal)
+    if dist_white_goal <= 1:
+        return 3           
+    moves = state.moves()
+    if len(moves) == 0:
+        return -3 if state.to_move == player else 3     
+    if dist_white_goal <= 2 and test_near_goal_certain_win_42(state, goal):
+        return 2.5
+    if distancia_42(state.white, no_goal) <= 1:
+        return -1.5          
+    return general_eval361(moves, state, goal)
+jogador439995 = Jogador("jogador439995",
+                  lambda game, state:
+                  alphabeta_cutoff_search_new(state,game,depth_for_all,eval_fn=fun_aval_439995))
+                  
 #########################################################################################################
 
 
@@ -488,7 +701,7 @@ def n_faz_campeonato(num_campeonatos, listaJogadores, nsec=5, verbose = False):
 basilio_test = Jogador("Basilio_test", lambda game, state:
                   alphabeta_cutoff_search_new(state,game,depth_for_all,eval_fn=f_aval_basico))
         
-lista_campeonato = [basilio, jogador4362, jogador4363, jogador4392, jogador4395, jogador4396, jogador4397, jogador4398]
+lista_campeonato = [basilio, jogador4362, jogador4395, jogador439990, jogador439992, jogador439993, jogador439994, jogador439995]
                     
 if __name__ == '__main__':
     n_faz_campeonato(N_CAMP, lista_campeonato, verbose = False)
